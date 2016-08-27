@@ -1,0 +1,18 @@
+---
+
+- name: make sure python-apt is installed
+  package: name=python-apt state=present
+
+- name: add MAAS PPA
+  apt_repository: >
+    repo={{ maas_apt_repo }}
+    state=present
+    update_cache=yes
+
+- name: refresh apt cache
+  command: apt-get update
+
+- name: install MAAS package
+  package: name=maas state=present
+
+

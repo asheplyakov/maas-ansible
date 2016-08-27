@@ -1,0 +1,6 @@
+<network>
+  <name>maas-int</name>
+  <bridge name='vbrmaasint' stp='on' delay='0'/>
+  <ip address='10.40.0.1' netmask='255.255.255.0'/>
+</network>
+

@@ -1,0 +1,17 @@
+---
+
+- name: check for existing ssh keys
+  command: maas {{ maas_admin.login }} sshkeys list
+  register: maas_ssh_keys_raw
+
+- set_fact:
+    maas_ssh_keys: "{{ maas_ssh_keys_raw.stdout|from_json }}"
+
+- name: import ssh keys to MAAS
+  command: >
+    maas {{ maas_admin.login }} sshkeys new key='{{ ssh_key }}'
+  vars:
+    ssh_key: "{{ lookup('file', item) }}"
+  when:
+    "{{ ssh_key not in maas_ssh_keys|map(attribute='key') }}"
+  with_items: "{{ maas_import_ssh_keys|default([]) }}"

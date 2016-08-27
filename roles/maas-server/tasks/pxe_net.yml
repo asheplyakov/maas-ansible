@@ -1,0 +1,40 @@
+---
+
+- name: find out cluster UUID
+  command: >
+    maas {{ maas_admin.login }} node-groups list
+  register: maas_node_groups_raw
+
+- set_fact:
+    maas_node_groups: "{{ maas_node_groups_raw.stdout|from_json }}"
+
+- name: check if MAAS detected interfaces
+  command: >
+    maas {{ maas_admin.login }}
+    node-group-interfaces list {{ maas_node_groups[0].uuid }}
+  register: maas_node_group_interfaces_raw
+
+- set_fact:
+    maas_node_group_interfaces: "{{ maas_node_group_interfaces_raw.stdout|from_json }}"
+
+- name: create node-group interface
+  command: >
+    maas {{ maas_admin.login }}
+    node-group-interfaces new
+    {{ maas_node_groups[0].uuid }}
+    name={{ managed_network.iface }}
+    ip={{ managed_network.server_ip }}
+    broadcast_ip={{ managed_network.broadcast }}
+  when: "{{ managed_network.iface not in maas_node_group_interfaces|map(attribute='interface') }}"
+
+- name: set the managed interface
+  command: >
+    maas {{ maas_admin.login }}
+    node-group-interface update
+    {{ maas_node_groups[0].uuid }}
+    {{ managed_network.iface }}
+    ip_range_low={{ managed_network.dhcp_range[0] }}
+    ip_range_high={{ managed_network.dhcp_range[1] }}
+    broadcast_ip={{ managed_network.broadcast }}
+    management=2
+

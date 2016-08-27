@@ -1,0 +1,16 @@
+<network>
+  <name>maas-pub</name>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='vbrmaas' stp='on' delay='0'/>
+  <domain name='vm.maas.asheplyakov'/>
+  <ip address='192.168.252.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.252.4' end='192.168.252.254'/>
+    </dhcp>
+  </ip>
+</network>
+

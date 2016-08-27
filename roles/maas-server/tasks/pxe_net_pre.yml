@@ -1,0 +1,27 @@
+---
+
+# Configure and enable PXE interface so MAAS will detect it during the package
+# installation. MAAS' DHCP, TFTP, and DNS servers listen this interface.
+
+- name: configure PXE interface
+  template: >
+    src={{ role_path }}/templates/ethn.cfg.j2
+    dest=/etc/network/interfaces.d/{{ managed_network.iface }}.cfg
+    owner=root
+    group=root
+    mode=0644
+
+- name: enable PXE interface
+  command: ifup {{ managed_network.iface }}
+
+- name: preseed MAAS server ip and URL, p1
+  template: >
+    src={{ role_path }}/templates/debconf.j2
+    dest=/tmp/maas-debconf.txt
+    owner=root
+    group=root
+    mode=0640
+
+- name: preseed MAAS server ip and URL, p2
+  shell: cat /tmp/maas-debconf.txt | debconf-set-selections
+

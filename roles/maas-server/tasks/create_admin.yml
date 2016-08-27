@@ -1,0 +1,26 @@
+---
+
+- name: check if MAAS superuser exists
+  command: >
+    maas-region-admin apikey --username={{ maas_admin.login }}
+  register: maas_admin_check
+  failed_when: false
+
+- name: create MAAS superuser
+  command: >
+    maas-region-admin createadmin
+    --username={{ maas_admin.login }}
+    --password={{ maas_admin.password }}
+    --email={{ maas_admin.email|default('admin@example.com') }}
+  when: "{{ maas_admin_check.rc != 0 }}"
+
+- name: get MAAS API key
+  command: >
+    maas-region-admin apikey --username={{ maas_admin.login }}
+  register: maas_api_key
+
+- name: login to MAAS
+  command: >
+    maas login
+    {{ maas_admin.login }} {{ maas_api_url }} {{ maas_api_key.stdout }}
+

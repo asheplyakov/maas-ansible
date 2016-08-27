@@ -1,0 +1,37 @@
+
+distro_release: trusty
+
+hosts:
+  clients:
+    - maas2
+
+
+storage_conf:
+  os:
+    vg: as-ubuntu-vg
+    thin_pool: vmpool
+
+vm_conf:
+  base_ram: 4096
+  swap_size: 4096
+  drives:
+    os:
+      disk_size: 32768
+  swap_label: MOREVM
+
+
+net_conf:
+  http_proxy: "http://{hypervisor_ip}:3128"
+
+networks:
+  default:
+    source_net: "default"
+    order: 0
+  managed:
+    source_net: "maas2-int"
+    order: 1
+
+source_image:
+  version: 20160824.1
+  url: "http://cloud-images.ubuntu.com/{distro_release}/{version}/{distro_release}-server-cloudimg-amd64-disk1.img"
+  cache_directory: "/srv/data/Public/img"

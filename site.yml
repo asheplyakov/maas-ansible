@@ -1,0 +1,6 @@
+---
+
+- hosts: maas
+  become: true
+  roles:
+  - maas-server

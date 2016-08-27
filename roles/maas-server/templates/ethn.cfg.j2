@@ -1,0 +1,6 @@
+auto {{ managed_network.iface }}
+iface {{ managed_network.iface }} inet manual
+	up ip addr add {{ managed_network.server_ip }}/{{ managed_network.address_bits }} brd {{ managed_network.broadcast }} dev {{ managed_network.iface }}
+	up ip link set up dev {{ managed_network.iface }}
+	down ip link set down dev {{ managed_network.iface }}
+	down ip addr del {{ managed_network.server_ip }}/{{ managed_network.address_bits }} dev {{ managed_network.iface }}

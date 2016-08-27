@@ -1,0 +1,17 @@
+---
+
+# Configure and enable PXE interface *before* installing the package
+# so the interface is detected during the installation
+
+- include: ./pxe_net_pre.yml
+
+- include: ./install_pkg.yml
+
+- include: ./create_admin.yml
+
+- include: ./sshkeys.yml
+
+- include: ./bootresources.yml
+
+- include: ./pxe_net.yml
+

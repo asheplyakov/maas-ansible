@@ -1,0 +1,9 @@
+---
+
+maas_admin:
+  login: root
+  email: admin@example.com
+
+maas_api_url: http://{{ managed_network.server_ip }}/MAAS/api/1.0
+
+maas_apt_repo: "ppa:maas/stable"

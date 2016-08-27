@@ -1,0 +1,10 @@
+---
+
+# FIXME: configure release/arch/mirror/etc instead of using the defaults
+
+- name: start boot resources import
+  command: >
+    maas {{ maas_admin.login }} boot-resources import
+
+# FIXME: how do I check the progress/status of import?
+
